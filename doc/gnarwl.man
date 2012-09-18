@@ -106,9 +106,8 @@ and have file permission 0400.
 Entrypoint of the search. There is no default for this directive, it must
 be supplied by the administrator.
 
-.IP "protocol <0|2|3>
-Select protocol to bind to the ldapserver. The default is 0, which means
-"autodetect".
+.IP "protocol <2|3>
+Select protocol to bind to the ldapserver. The default is 3.
 
 .IP "queryfilter <ldap queryfilter>"
 Search pattern to match against the database. Defaults to:
