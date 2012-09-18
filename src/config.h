@@ -2,6 +2,9 @@
  * Holds the data of the config file
  */
 struct conf {
+  char *uri;		// LDAP uri
+  char *ca_cert;	// LDAP TLS_CACERTFILE
+  int starttls;     //
   char *base;		// LDAP base
   char *uid;		// LDAP bind dn
   char *pwd;		// LDAP bind password

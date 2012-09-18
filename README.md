@@ -45,3 +45,14 @@ Gnarwl features:
     object in the outgoing mail.
 *   Unicode support.
 *   GPL software.
+
+Improvements
+------------
+
+
+*   LDAP protocol version 3 is used by default.
+*   New config option *server_uri* allows using more than one LDAP server for 
+    failover.
+*   New config option *ca_cert* allow specifying CA certificate when ldaps or 
+    StartTLS is used.
+*   New config option *starttls*.

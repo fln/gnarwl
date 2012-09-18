@@ -80,6 +80,18 @@ void putEntry(char* key, char* val) {
     return;
   }
   
+  if (!strcasecmp(key,"server_uri")) {
+    cfg.uri=val;
+    return;
+  }
+  if (!strcasecmp(key,"ca_cert")) {
+    cfg.ca_cert=val;
+    return;
+  }
+  if (!strcasecmp(key,"starttls")) {
+    cfg.starttls = atoi(val);
+    return;
+  }
   if (!strcasecmp(key,"server")) {
     cfg.server=val;
     return;
@@ -174,8 +186,8 @@ void putEntry(char* key, char* val) {
   }
   if (!strcasecmp(key,"protocol")) {
     switch(atoi(val)) {
-      case 2: {cfg.protver=PROTVER2; break;}
-      case 3: {cfg.protver=PROTVER3; break;}
+      case 2: {cfg.protver = LDAP_VERSION2; break;}
+      default: {cfg.protver = LDAP_VERSION3; break;}
     }
     return;
   }
@@ -186,9 +198,11 @@ void putEntry(char* key, char* val) {
 void setDefaults(void) {
   cfg.umask=UMASK;
   cfg.base=DEFAULT_BASE;
-  cfg.protver=LDAP_PROTOCOL_DETECT;
+  cfg.protver=LDAP_VERSION3;
   cfg.uid=NULL;
   cfg.pwd=NULL;
+  cfg.uri=NULL;
+  cfg.starttls=0;
   cfg.server=DEFAULT_SERVER;
   cfg.qfilter=DEFAULT_QFILTER;
   cfg.mfilter=NULL;

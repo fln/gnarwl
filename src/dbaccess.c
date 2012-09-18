@@ -176,24 +176,34 @@ int dbContains(const char* str_ptr, GDBM_FILE dbf_ptr) {
 
 void dbConnect() {
   int rc;
-  
-  ldcon=ldap_init(cfg.server,cfg.port);
+
+  if (cfg.ca_cert) {
+    rc = ldap_set_option(NULL, LDAP_OPT_X_TLS_CACERTFILE, cfg.ca_cert);
+    if (rc != LDAP_SUCCESS) {
+        syslog(LOG_MAIL|LOG_ERR,"CRIT/LDAP Set option TLS_CACERTFILE failed: %s",ldap_err2string(rc));
+        exit(EXIT_FAILURE);
+    }
+  }
+
+  if (cfg.uri)
+    rc = ldap_initialize(&ldcon, cfg.uri);
+  else
+    ldcon=ldap_init(cfg.server,cfg.port);
+
   if (ldcon==NULL) {
     syslog(LOG_MAIL|LOG_ERR,"CRIT/LDAP Connection failed");
     exit(EXIT_FAILURE);
   }
 
-#ifdef HAVE_LDAP_SET_OPTION
-  if (cfg.protver==LDAP_PROTOCOL_DETECT) {
-    int prot=LDAP_VERSION2;
-    ldap_set_option(ldcon,LDAP_OPT_PROTOCOL_VERSION, &prot);
-    if (ldap_simple_bind_s(ldcon,cfg.uid,cfg.pwd)==LDAP_SUCCESS) return;
-    prot=LDAP_VERSION3;
-    ldap_set_option(ldcon,LDAP_OPT_PROTOCOL_VERSION, &prot);
-    if (ldap_simple_bind_s(ldcon,cfg.uid,cfg.pwd)==LDAP_SUCCESS) return;
+  ldap_set_option(ldcon, LDAP_OPT_PROTOCOL_VERSION, &cfg.protver);
+
+  if (cfg.starttls) {
+    rc = ldap_start_tls_s(ldcon, NULL, NULL);
+    if (rc != LDAP_SUCCESS) {
+        syslog(LOG_MAIL|LOG_ERR,"CRIT/LDAP StartTLS failed: %s",ldap_err2string(rc));
+        exit(EXIT_FAILURE);
+    }
   }
-  else ldap_set_option(ldcon,LDAP_OPT_PROTOCOL_VERSION, &cfg.protver);
-#endif
 
   rc=ldap_simple_bind_s(ldcon,cfg.uid,cfg.pwd);
   if (rc!=LDAP_SUCCESS) {

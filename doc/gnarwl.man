@@ -75,6 +75,15 @@ email. Defaults to "$subject".
 Binds a macroname (case insensitive), refering to a field in the resultset, 
 returned by the database. There are no defaults for this directive.
 
+.IP "server_uri <ldap_uri [ldap_uri ...]>"
+URI of the databaseserver to query. Multiple URIs can be specified. No default value.
+
+.IP "starttls <0|1>"
+Enforce StartTLS on connect. Defaults to 0.
+
+.IP "ca_cert </path/to/certificate>"
+Use specified CA cert to validate ldap server certificate. No default value.
+
 .IP "server <address>"
 Address of the databaseserver to query. Defaults to localhost.
 
