@@ -1,0 +1,67 @@
+// Multiply config directive "db_expire" with this value
+#define TIMEFACTOR 3600
+
+// How many seconds to wait for LDAP data, before giving up
+#define LDAPQUERY_MAXWAIT 10
+
+// Defaults for several config directives
+#define DEFAULT_SERVER "localhost"
+#define DEFAULT_QFILTER "(&(mail=$recepient)(vacationActive=TRUE)"
+#define DEFAULT_MES "vacationInfo"
+#define DEFAULT_BASE ""
+#define DEFAULT_EXPIRE 48
+#define DEFAULT_MAIL_LIMIT 256
+#define DEFAULT_MAP_SENDER "$sender"
+#define DEFAULT_MAP_RECEIVER "$recepient"
+#define DEFAULT_MAP_SUBJECT "$subject"
+#define LDAP_PROTOCOL_DETECT 0
+#define LDAP_CHARSET "UTF-8"
+
+// Verbositylevel
+#define LVL_CRIT 0
+#define LVL_WARN 1
+#define LVL_INFO 2
+#define LVL_DEBUG 3
+
+
+/* <Filled by the configure script> */
+
+// Having this call allows to select the protocol
+#undef HAVE_LDAP_SET_OPTION
+// Having this call allows for charset translation
+#undef HAVE_ICONV
+// What to use as default MTA
+#undef DEFAULT_MTA
+// Maximum size for input buffer
+#undef MAXLINE
+// File permission mask
+#undef UMASK
+
+/* </Filled by the configure script> */
+
+// Don't change ;-)
+#define TRUE 1
+#define FALSE 0
+
+// Failsafe. Just in case (guess some sane values)
+#ifndef CFGFILE
+#define CFGFILE "/etc/gnarwl.cfg"
+#endif
+#ifndef VERSION
+#define VERSION " <unknown>"
+#endif
+#ifndef BLOCKDIR
+#define BLOCKDIR "/tmp/"
+#endif
+#ifndef DEFAULT_MTA
+#define DEFAULT_MTA "/usr/sbin/sendmail"
+#endif
+#ifndef MAXLINE
+#define MAXLINE 2100
+#endif
+#ifndef BLOCKDIR
+#define BLOCKDIR "/tmp"
+#endif
+#ifndef UMASK
+#define UMASK 0600
+#endif

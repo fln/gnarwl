@@ -1,0 +1,121 @@
+#
+# This is an example configfile for gnarwl(_MAN_SEC_) v_VER_, listing every
+# available directive. Empty lines and lines beginning with a pound symbol
+# are ignored by the software. Please keep in mind, that gnarwl uses a
+# very basic parser for reading this file. Therefore some restrictions are
+# put on the format:
+#
+# 1. Only whitespaces (no tabs) are allowed as delimeter between key and 
+#    value(s).
+# 2. Whitespaces can neither be escaped nor quoted.
+# 3. Macros must be declared before use.
+#
+
+
+# Name of the macro, refering to the "From:" field of a received mail
+map_sender $sender
+
+# Name of the macro, refering to the "To:" or "Cc:" field of a received mail
+map_receiver $recepient
+
+# Name of the macro, refering to the "Subject:" field of a received mail
+map_subject $subject
+
+# Bind a database field to a macroname
+map_field $begin vacationStart
+
+# Bind a database field to a macroname
+map_field $end vacationEnd 
+
+# Bind a database field to a macroname
+map_field $fullname cn
+
+# Bind a database field to a macroname
+map_field $deputy vacationForward
+
+# LDAP Server to bind to
+server localhost
+
+# Port, the LDAP server is listening on
+port 389
+
+# search scope (base|one|sub)
+scope sub
+
+# Destinguished name to bind with (leave empty to bind anonymously)
+login
+
+# Password to bind with (leave empty to bind anonymously)
+password
+
+# Which protocol <0|2|3> to use for binding. The deafult is 0, which stands
+# for "autodetect".
+protocol 0
+
+# From where to start searching the LDAP tree (you have to change this!)
+base o=my_organization
+
+# Query filter to use for ldapsearch
+queryfilter (&(mail=$recepient)(vacationActive=TRUE))
+
+# The attribute to querying for. The content of this field will be pasted
+# between header and footer (see also: forceheader and forcefooter
+# directives) afterwards all macros are expanded and the result is piped
+# through to the MTA (see also: mta directive).
+result vacationInfo
+
+# The files in this directory are used to keep track on who was sent
+# an automatic reply from whom and when.
+blockfiles _HOMEDIR_/block/
+
+# File permissions to use for newly created database files
+umask 0644
+
+# After how many hours the block on a specific sender/receiver combo expires.
+# Set to 0 to deactivate this feature (not recommended).
+blockexpire 48
+
+# How to send mail. Specify full name to your MTA plus arguments. Only the
+# map_sender and map_receiver macros are expanded. This program must be
+# able to accept email from stdin.
+mta /usr/sbin/sendmail -F $recepient
+
+# Ignore mails, that specify too many receivers
+maxreceivers 64
+
+# Ignore mails with too many headerlines (avoid DOS attacks)
+maxheader 512
+
+# If outgoing mail may contain non ASCII characters, specify your locale 
+# charset here for character conversion. Check iconv(1) for allowed values.
+# Leave blank to disable this feature.
+charset ISO8859-1
+
+# If gnarwl reads a mailheaderline, that exactly matches an entry in this
+# database file, the mail will be ignored (usefull for preventing autoreplies
+# to mailinglists). Case does matter, no wildcard expansion.
+# Leave empty to deactivate.
+badheaders _HOMEDIR_/badheaders.db
+
+# Gnarwl will never autoreply for emailaddresses found in the blacklist 
+# (usefull for preventing autoreplies from root, postmaster, etc.). Leave
+# Empty to disable this feature.
+blacklist _HOMEDIR_/blacklist.db
+
+# The contents of this textfile are pasted in front of each outgoing mail.
+forceheader _HOMEDIR_/header.txt
+
+# The contents of this textfile are appended to each outgoing mail.
+forcefooter _HOMEDIR_/footer.txt
+
+# Whitespace delimeted list of headernames, which may contain receiving 
+# emailaddresses (case insignificant).
+recvheader To Cc
+
+# Set loglevel (0|1|2|3). A higher loglevel always contains all lower
+# loglevels.
+# 0 - Critical messages only. Anything, gnarwl cannot continue afterwards.
+# 1 - Warnings. Gnarwl can continue, but with reduced functionality.
+# 2 - Info. General information on gnarwl's status.
+# 3 - Debug. 
+loglevel 1

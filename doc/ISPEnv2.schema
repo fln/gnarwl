@@ -1,0 +1,341 @@
+# General information:
+# This file contains (open)LDAP schema specifications of the billiton
+# internetservices GmbH (see contact info below). Permission to use 
+# and redistribute unmodified copies of this file is given.
+# Beyond  that, no warranties (neither regarding functionality nor 
+# availability) are provided.
+#
+#                    ***********************************
+#                    * USE THIS FILE AT YOUR OWN RISK! *
+#                    ***********************************
+#
+#
+# General guideline:
+# 1. The language in this file is english
+# 2. Every OID in this file must look like this: ns.a.b.c.d, where
+#    ns - the official namespace of billiton internetservices:
+#         1.3.6.1.4.1.11048
+#    a  - Partition, identifies the type of the OID 
+#         0  : experimental,
+#         1  : ISPEnv Schema,
+#         x  : reserved
+#    b  - Reserved, must always be 1.     
+#    c  - Entry type (1:attribute, 2:object)
+#    d  - Serial number (increased with every new entry)
+# 3. Every entry in this file MUST have a "DESC" field, containing a 
+#    suitable description!
+# 4. New entries are to be kept as generic as possible.
+# 5. Attributes are listed in front of objects. All entries must be
+#    ordered by their serial number.
+# 
+#
+# Required schema files:
+#  core.schema
+#  cosine.schema
+#
+#
+# Conflicting schema files:
+#  misc.schema
+#  billiton.schema
+#  ISPEnv.schema
+#
+# 
+# Contact information:
+# billiton internetservices
+# Welterstr. 55
+# 57074 Siegen 
+# Germany
+# Patrick Ahlbrecht <p.ahlbrecht@billiton.de>
+#
+#
+# Last change:
+# 11.JUN 2003
+#
+# New versions:
+# http://www.oss.billiton.de/
+#
+
+#
+# Attributes start here
+#
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.1
+	NAME 'vacationActive'
+	SINGLE-VALUE
+	EQUALITY booleanMatch
+	DESC 'A flag, for marking the user as being away'
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )
+	
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.2
+	NAME 'webAccess'
+	SINGLE-VALUE
+	EQUALITY booleanMatch
+	DESC 'A flag for (de-)activating access to the proxy server'
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.3
+	NAME 'vacationInfo'
+	SINGLE-VALUE
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40
+	DESC 'Absentee note to leave behind, while on vacation'
+	EQUALITY octetStringMatch )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.4
+	NAME 'vacationStart'
+	SINGLE-VALUE
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40
+	DESC 'Beginning of vacation'
+	EQUALITY octetStringMatch )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.5
+	NAME 'vacationEnd'
+	SINGLE-VALUE
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40
+	DESC 'End of vacation'
+	EQUALITY octetStringMatch )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.6
+	NAME 'maildropPlace'
+	DESC 'Location of the mailbox'
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	SUBSTR caseExactIA5SubstringsMatch
+	EQUALITY caseExactIA5Match )
+
+attributetype (1.3.6.1.4.1.11048.1.1.1.7
+	NAME 'mailForward'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	DESC 'Address to forward email to' )
+
+attributetype (1.3.6.1.4.1.11048.1.1.1.8
+	NAME 'proxyHost'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	DESC 'Fully qualified hostname of a proxyserver' )
+
+attributetype (1.3.6.1.4.1.11048.1.1.1.9
+	NAME 'mailHost'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	DESC 'Fully qualified hostname of a mailserver' )
+
+attributetype (1.3.6.1.4.1.11048.1.1.1.10
+	NAME 'vacationForward'
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	DESC 'Where to forward mails to, while on vacation' )
+
+attributetype (1.3.6.1.4.1.11048.1.1.1.11
+	NAME 'custID'
+	EQUALITY caseExactMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	DESC 'Unique ID value to identify a specific customer' )
+	
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.12
+	NAME 'billPaid'
+	SINGLE-VALUE
+	EQUALITY booleanMatch
+	DESC 'Payment status of a specific resource'
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.13
+	NAME 'note'
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40
+	DESC 'A generic note'
+	EQUALITY octetStringMatch )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.14
+	NAME 'uucpHost'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+	DESC 'Next hop in a uucp network' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.15
+	NAME 'type'
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'For classifying an entry without using an objectclass' )
+	
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.16
+	NAME 'status'
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'For adding status information to an entry' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.17
+	NAME 'dunningCounter'
+	SINGLE-VALUE
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	EQUALITY integerMatch
+	DESC 'How many times the bill was not paid' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.18
+	NAME 'price'
+	SINGLE-VALUE
+	EQUALITY caseIgnoreIA5Match
+	SUBSTR caseIgnoreIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'How much to charge for a specific resource' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.19
+	NAME 'currency'
+	SINGLE-VALUE
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'The currency, payment is expected in' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.20
+	NAME 'payperiod'
+	SINGLE-VALUE
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'The timeperiod, recurring payment is expected in' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.21
+	NAME 'payday'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'On which day payment is expected' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.22
+	NAME 'productcode'
+	SINGLE-VALUE
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'Articlegroup identifier' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.23
+	NAME 'filePerm'
+	SINGLE-VALUE
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'file permission field' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.24
+	NAME 'fileContent'
+	SINGLE-VALUE
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.5
+	DESC 'file content' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.25
+	NAME 'fileName'
+	SINGLE-VALUE
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'relative filename' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.26
+	NAME 'filePath'
+	SINGLE-VALUE
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'path to the file' )
+
+attributetype ( 1.3.6.1.4.1.11048.1.1.1.27
+	NAME 'fileType'
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+	DESC 'type of file' )
+
+
+
+
+#
+# Objects start here
+#
+
+objectclass ( 1.3.6.1.4.1.11048.1.1.2.1
+	NAME 'Vacation'
+	SUP top
+	AUXILIARY
+	DESC 'Users vacation status information'
+	MUST ( vacationActive )
+	MAY ( vacationInfo $ vacationStart $ vacationEnd $ vacationForward ) )
+
+objectclass ( 1.3.6.1.4.1.11048.1.1.2.2
+	NAME 'mailAccount'
+	SUP top
+	AUXILIARY
+	DESC 'Emailaccount, associated with a user'
+	MUST (uid $ userPassword $ mail ) 
+	MAY ( mailForward $ mailHost $ cn $ maildropPlace ) )
+
+objectclass ( 1.3.6.1.4.1.11048.1.1.2.3
+	NAME 'caretaker'
+	SUP top
+	STRUCTURAL
+	DESC 'For implementing administrative access control. This
+	objectclass should be used to allow programs to bind to the LDAP
+	tree.'
+	MUST ( uid $ userPassword )
+	MAY ( description $ owner ) )
+
+objectClass ( 1.3.6.1.4.1.11048.1.1.2.4
+	NAME 'proxyAccount'
+	SUP top
+	AUXILIARY
+	DESC 'Account for accessing the proxy server'
+	MUST (webAccess $ uid $ userPassword ) 
+	MAY ( proxyHost ) )
+
+objectClass (1.3.6.1.4.1.11048.1.1.2.5
+	NAME 'customer'
+	SUP top
+	STRUCTURAL
+	DESC 'Customer information (container class)'
+	MUST (cn $ custID )
+	MAY (postalAddress $ telephoneNumber $ fax $ street $
+	postalCode $ description $ mail ) )
+
+objectClass ( 1.3.6.1.4.1.11048.1.1.2.6
+	NAME 'genericAccount'
+	SUP top
+	AUXILIARY
+	DESC 'The most abstract form of an account'
+	MUST ( uid )
+	MAY ( userPassword $ userCertificate ) )
+
+objectClass ( 1.3.6.1.4.1.11048.1.1.2.7
+	NAME 'uucpAccount'
+	SUP top
+	AUXILIARY
+	DESC 'Account for UUCP connections'
+	MUST ( uid $ userPassword $ dc $ uucpHost ) )
+
+objectClass ( 1.3.6.1.4.1.11048.1.1.2.8
+	NAME 'metaInfo'
+	SUP top
+	AUXILIARY
+	DESC 'Easy way to bind additional information to an entry without
+	deploying a specific objectclass'
+	MAY ( note $ type $ status $ cn $ description ) )
+
+objectClass ( 1.3.6.1.4.1.11048.1.1.2.9
+	NAME 'accountable'
+	SUP top
+	AUXILIARY
+	DESC 'Marks a resource (an entry) as being subject to payment'
+	MAY ( billpaid $ price $ currency $ payperiod $ payday $
+	dunningCounter $ productcode ) )
+
+objectClass ( 1.3.6.1.4.1.11048.1.1.2.10
+	NAME 'file'
+	SUP top
+	STRUCTURAL
+	DESC 'Used to store files in LDAP'
+	MUST ( fileName)
+	MAY ( filePath $ filePerm $ fileContent $ fileType ) )
+
+
+
+# EOF

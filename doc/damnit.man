@@ -1,0 +1,96 @@
+.TH DAMNIT _MANSEC_
+.SH NAME
+damnit \- DAtabase MaNagement InTerface
+
+.SH SYNOPSIS
+.B damnit 
+[\-h] 
+[\-d\ <file>\ <value>]
+[\-a\ <file>\ <value>] 
+[\-f\ <string>]
+[\-l\ <file>]
+
+.SH DESCRIPTION
+.B damnit
+is the database management tool for 
+.B gnarwl(_MANSEC_)
+. It allows
+systemadministrators to list and/or manipulate 
+.B gnarwl's
+database files. It is 
+not intented to be employed by the average user, who should use LDAP as
+the only interface to
+.B gnarwl(_MANSEC_)
+.
+
+.SH OPTIONS
+.IP -h
+Print usage information
+
+.IP "-f <string>"
+Select output format for database listing (only meaningful with -l).
+<string> is the template for what the output should look like. The following
+macros are recognized: %entry, %time, %tstamp, \\en and \\et. Translating to
+the entry itself, the entrytime (in human readable form), the entrytime (as
+timestamp), a newline character, and a tab character.
+The default format is: "%time -> %entry\\en". Don't forget the trailing 
+newline.
+
+.IP "-d <file> [<value>]"
+Delete <value> from <file>. If <value> is omited, damnit will read <value>
+from stdin (one per line), until either EOF or an empty line is detected.
+
+.IP "-a <file> [<value>]"
+Add <value> to <file>. If <value> is already stored in <file>, damnit will
+only update the timestamp. If <value> is omited, damnit will read <value>
+from stdin (one per line), until either EOF or an emtpy line is detected.
+
+.IP "-l <file>"
+List database file specified by <file>.
+
+.SH DATABASE FILES
+.B gnarwl
+uses hashfiles for storing information on disk. Meaning, all
+datasets consist of key and value pairs. The key is always 
+a NULL terminated character string, while the value contains the timestamp,
+when the key was entered (last time) into the file. This timestamp is of type
+time_t (as returned by time(2)) and therefore, 
+.B gnarwl's
+database files are not copyable between different system architectures.
+
+.SH AUTHOR
+Patrick Ahlbrecht <p.ahlbrecht@billiton.de>
+
+.SH SEE ALSO
+.BR gnarwl(_MANSEC_)
+
+.SH FILES
+.I _HOMEDIR_/block/*
+.RS
+Every file in this directory represents an emailaddress, 
+.B gnarwl
+(already) received a mail for. Every time, gnarwl sends out an autorreply 
+for an address, the recepient of that mail is locked into the according file.
+.B gnarwl 
+will not send any further autoreplies for this sender/receiver combo, until 
+the timeout specified in gnarwl.cfg expires.
+.RE
+.P
+.I _HOMEDIR_/blacklist.db
+.RS
+Emailaddresses listed as keys in this file are not subject to autoresponding 
+(the addresses of root, postmaster, webmaster and the like should
+be put herin). Note: The complete mailaddress, as it would appear in an email, 
+must be specified here, as 
+.B gnarwl
+checks these "as-is".
+.RE
+.P
+.I _HOMEDIR_/badheaders.db
+.RS
+Each entry in this file represent a line that may not occur in the header
+of a received email. That is, 
+.B gnarwl
+won't reply to any mail, it is able
+to match a headerline with an entry in this file.
+.RE

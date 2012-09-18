@@ -1,0 +1,226 @@
+Q: Does gnarwl need root access?
+A: No, gnarwl does not require any extended priveleges at all, but of course
+it needs access to it's own files and should therefore be installed under 
+it's own UID. Keep in mind, that gnarwl.cfg as well as gnarwl's homedirectory
+(may) contain sensible data. So care should be taken concerning file owner-
+ship and permission.
+
+-----
+Q: What is this blacklist stuff good for?
+A: The whole point of employing LDAP for data storage instead of flat text
+files, is to keep all datarecords, belonging to a single user in a single
+place. Unfortunatly this proves to be futile for gnarwl, as soon as users
+either begin to share emailaddresses, or - even worse - get systemmail
+(e.g. root, webmaster, postmaster, etc.). You certainly don't want to
+generate automatic replies, stating that "sales@bigbiz.com" is currently
+gone fishing. On the other hand, you can't dissallow the user in question to 
+use the autoresponder either. And thats what that blacklist is good for: An 
+address listed in this database will never produce an automatic reply,
+even if the LDAP data says otherwise.
+
+-----
+Q: What is this badheaders and blockfile stuff good for?
+A: They are used to prevent mail bouncing happily back and forth between 
+gnarwl and another automated MUA (which can really generate a lot of network
+traffic and fill disks very fast). With the blockfiles, gnarwl keeps track
+on who already got an automatic reply, and makes sure s/he doesn't get
+another one too soon. The badheaders may be used to prevent gnarwl from
+replying to a mailing list.
+
+-----
+Q: Someone mailed me back an emailbounce, saying gnarwl failed.
+A: This happens whenever gnarwl exits with EXIT_FAILURE. Normally this
+should not happen, or better said: A user is not able to provoke this
+him-/herself by simply sending a (garbled) mail, so you should check your 
+maillog. Probable causes:
+Gnarwl could not ...
+- access lock or configfile
+- contact the LDAP server
+- invoke your MTA
+
+If none of this is the case you probably discovered a bug ;-).
+
+-----
+Q: The header of the mail, gnarwl sent out seems to be somehow garbled.
+A: Gnarwl won't generate a mailheader itself, you have to provide one
+yourself. You have the choice of either putting a complete mail (header and
+body) in the field, refered to by "result", or you can force a unified 
+standard header upon your users, by putting it in the file refered to by
+forceheader (NOTE: header and body must be separated by a single empty
+line, so don't forget to put such a line at the end of this file, if you
+forget to do so, it is assumed, that the user may continue the header and
+will supply the empty line him/herself).
+
+-----
+Q: Wouldn't it be nice if a user only had to supply a vacationStart and a
+vactionEnd date and gnarwl would automatically de/activate itself in this 
+period?
+A: Sure, that would be nice, but it won't be included in gnarwl for a simple
+reason: What format would that date be?
+
+- 13.01.01
+- 01.13.01
+- 01.13.2002
+- 26.25.1234
+- 01/01/03
+- 14. Jun, 2004
+- July the 14th 
+- Montag
+- Tomorow
+- Christmas
+
+Just to name a few variants. As you see, there are numerous ways to
+(mis)spell a date, bring in a locale or make unprecise (even wrong)
+statements. Trying to deal with these would open a can of worms regarding
+syntax and semantic check. It would also remove a great deal of gnarwls 
+flexibility. Therefore I'm afraid you have to either provide this feature
+by using add-on software (some script, that runs from CRON and toggle
+"vactionActive), or adapt the search filter in some way.
+
+-----
+Q: Does gnarwl expand macros inside of macros? It seems to do so only
+sometimes?
+A: Gnarwl expands macros in the same order, they are declared in the
+configfile. So the earlier ones may contain all the later ones, but not vice
+versa. Let's regard this to be a feature ;-).
+
+-----
+Q: I mapped $somemacro to someattribute, using the map_field directive. This
+ldapattribute now contains more than one value, but gnarwl only sees the
+first one, how do I refer to the second, third,...
+A: You don't gnarwl is not able to deal with multivalued attributes, so it 
+always picks the first one it gets.
+
+-----
+Q: Which conditions must be fullfilled, in order for gnarwl to send out an
+autoreply?
+1. The incomming mail must not contain a headerline, matching a line in the 
+badheaders database.
+2. The mailheader must specify a sender and at least one recepient
+(naturally).
+3. The header must not contain more than "maxheader" lines.
+4. The mail may not specify more then "maxreceivers" addresses in the
+according header(s).
+5. Last action for a sender/recepient pair was at least "expire" hours ago.
+6. The receiving emailaddress must not be in the blacklist database.
+
+Points one to four refer the complete mail, that is, if one condition is not
+met, the complete mail is ignored.
+Points five and six refer to a single receiving address specified in the
+mail, that is, if one condition is not met, only this emailaddress is
+ignored, if the mail specified multiple recepients, they'll all get their
+chance.
+
+-----
+Q: Is it save to delete files in blockdir?
+A: Yes, it is as long as gnarwl is not accessing them. Gnarwl simply creates
+a new lockfile if the old one is missing (of course, the old content is
+lost, so deleting a blockfile "resets" the according emailaddress).
+
+-----
+Q: I plan to migrate the mailsystem to a different architecture, can I
+simply copy gnarwl's database files?
+A: No, this cannot be done. Gnarwl stores values of type time_t in those
+files. They cannot be recognized on architectures with a different
+endianess or sizeof(time_t). You have to employ the damnit program for
+doing so.
+
+-----
+Q: It seems that gnarwl processes some mails over and over again?!
+A: This happens whenever an email specifies more than one recepient local to
+your site and your mailsystem is configured to pipe any received email
+through gnarwl, using the .forward mechanism. In this case, the mail in
+question is naturally processed (local recepient)^2 times. If this is a
+performance issue to your site, you could try to configure gnarwl and your
+mailsystem to make use of the "Delivered-To:" header.
+
+-----
+Q: Will gnarwl answer to a BCC (blind carbon copy) mail?
+A: Not in the default configuration, as it is difficult to extract
+information that does not exist in the mail in the first place.
+If you want to be able to answer to BCC's, you could try going for the 
+"Delivered-To:" header.
+
+-----
+Q: I wrote this little perl (bash,python,...) script as an add-on for gnarwl. 
+It is quite handy, but I don't feel like maintaining my own downloadsite. 
+Would it be possible to bundle it with gnarwl?
+A: Yes, it is possible. That's, what the contrib/ branch is good for. But
+please keep in mind: You program must be properly coded (no backdoors, obvious
+security holes, etc.), well documented and of course not be specific to your
+site.
+
+-----
+Q: The email, gnarwl sent out contains strange glyphs everywhere.
+A: This happens wherever the mail contains non ASCII characters (german
+umlaute for example), as these are stored unicode encoded within LDAP. You
+have two choices here:
+1. Make sure, any non ASCII character is MIME encoded.
+   This is the proper way to do it, but may require some user discipline.
+
+2. Use the "charset" configdirective, to translate unicode into your locale.
+   Conversion is done using the iconv(3) routine, and therefore limited,
+   to the encodings, it knows about. NOTE: iconv may not be available on
+   every platform, in this case, the "charset" directive simply does
+   nothing.
+
+In both cases you should adjust the header.txt file accordingly.
+
+-----
+Q: What does "DEBUG/MAIL Code: <number> MessageID: <string>" in the maillog
+main?
+A: This line is produced by the mailparser and gives status information on
+every processed mail. "MessageID" is - of course - the content of the
+"Message-ID:" header, while code results from ORing the MAIL_* macros in
+mailhandler.h in the mail_status bitfield.
+
+-----
+Q: I run a heavy loaded Mailserver. Any tips on tuning gnarwl?
+A: Several:
+
+- Strip down your configfile. Comments and empty lines are waste, as well
+as config directives specifying default values.
+
+- Set the loglevel low, once your setup works. 
+
+- Creating blockfiles takes gnarwl a considerable amount of IO resources. You
+might want to pre-create them using damnit.
+
+- Make sure, to index all the attributes from the querystring in your LDAP
+database. Otherwise lookups may by very slow. Use anonymous binding and
+don't set the protocol to autodetect. Keep your entire database in RAM if
+possible.
+
+- Compile gnarwl with a smaller line input buffer (--with-maxline=NUMBER).
+The default is set very high (2.1kb), to make sure, no lines are truncated.
+Unless someone sends mail using a really broken MUA, 256 bytes should still
+do the trick.
+
+- Try to avoid retrieving emailaddresses from "To:" and "Cc:" headers (even
+though it is the default), as these headers may contain more than one
+entry. This results in a number of useless and/or redundant database
+queries.
+
+------
+Q: There are some persons, I don't want to sent automatic replies to, how do
+I do that?
+A: This may be a bit tricky/messy, as you have to find an attribute for
+storing the unwelcome remote address first. In case you don't feel like
+extending LDAP schema (and updating all objects in the database), I suggest,
+you simply (ab)use the vacationForward attribute for this. Then adapt the
+queryfilter to something like:
+"( &(&(mail=$receiver)(vacationActive=TRUE))(!(vacationForward=$sender)) )"
+
+------
+Q: Gnarwl may produce quite a lot of LDAP queries, wouldn't it be better to
+cache them in order to gain more performance?
+A: Nope. The problem is simply, that gnarwl does not run as a daemon, but is
+invoked once per mail, so there is no way to provide a in-memory cache,
+while a on-disk cache would probably have the opposite effect.
+
+------
+Q: There are two versions of the ISPEnv.schema, which one should I take?
+A: The old version is included for legacy reasons only and should not be used
+for new installations, as it will not work with recent openLDAP servers. 
+Beware if you plan to upgrade your schema, the two versions are slightly
+incompatible.

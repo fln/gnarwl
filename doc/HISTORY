@@ -1,0 +1,267 @@
+The versioning scheme of gnarwl consists of a major and a minor version
+number. An increase in the former means a new feature was added, while an
+increase in the later is to document a maintainance fix.
+
+1.0:
+  First public release.
+  
+1.1:
+- Added a retrycounter and random sleep call to dbstuff.dbLock(). This should 
+  fix an infinite loop problem of 1.0 where to instances of gnarwl would 
+  try to access the same .db file over and over again, blocking each other.
+
+- Updated documentation
+
+- Added this file
+
+- added README.pitfalls
+
+- Renamed SECURITY README.security
+
+- Updated Makefile (simplified it a bit)
+
+- Removed hardcoded "sendmail" from  execl call in gnarwl.doReply(),
+  replaced it with the result of basename(cfg.mta).
+
+- openlog is now called once in main(), instead of immediatly before
+  every syslog() call (what made me waste resources like this?).
+
+- Removed exit(0) call in main(), return 0; schould do as well.  
+
+- Updated gnarwl.printUsage(): Added version number, uses a single printf
+  now.
+
+- replaced exit(1) and exit(0) with exit(EXIT_FAILURE) and exit(EXIT_SUCCESS).
+  Code should be more portable this way.
+
+- gnarwl.addAddr() now checks first against cfg.maxmail before doing
+  anything else.
+
+- gnarwl.addAddr() now strips emailaddresses with angle brackets, e.g.:
+  John Doe <john@doe.org> becomes john@doe.org
+  
+- Added new config switch "log_verbose", since -v cannot be specified in
+  .forward files.
+
+- closed some memory leaks
+
+
+1.2
+- Added a newline character to gnarwl.c (gcc 2.96 complained about it)
+- Updates docs
+  * fixed some typos
+  * added a warning about openldap2.0.23 to INSTALL
+  * added a manpage (bouyah!).
+- Updated Makefile:
+  * $(VER) is now computed from the directory basename, instead of being 
+    hardcoded
+  * added new variable $(CONFDIR)
+  * The macros CFGFILE and VERSION are now defined via compiler switch
+- Changed gnarwl.printUsage():
+  * now also prints out default configfilename
+  * versioninformation is taken from VERSION macro (instead of being
+    hardcoded in the source).
+
+2.0
+- Renamed this file from CHANGES to HISTORY
+- moved src/dbstuff.c to dbaccess.c
+- killed dbaccess.dbExpired() ; integrated it's logic directly into dbCheck()
+- added new management utility, damnit (yes, that's it's name).
+- Splitted gnarwl.h -> every module has now it's own header
+- Updates Makefile: Everything is now installed under /usr/local per default
+- Changed gnarw.doReply() return type from int to void (since doReply always
+  returned TRUE are bailed out itself if something went wrong).
+- Reformulated most program messages
+- More logging
+- Base64 support. Actually it seems as if it was supported all the time, 
+  but I didn't know of it #-) (So much for the documentation of openldap
+  ;-). Why does ldapsearch return base64 encoded data, but 
+  ldap_get_first_entry() not ?!).
+- Changed return type of dbaccess.dbLock() from int to void. This method 
+  will now exit(EXIT_FAILURE) directly if locking was unsucesfull.
+- Fixed a bug in dbaccess.dbLock(): The do-while loop lacked the correct
+  break condition, so it always looped 10 times.
+- Replaced util.ewe(char*) with util.oom(). 
+- Removed default away message (waste of space and didn't look pretty
+  anyway).
+- Added more filechecking to dbaccess.dbCheck(). It was rather weak
+  before (would fail, if another process had the db file open for writing).
+- Added flexible deny rules for mail.
+- The blacklist is now stored in a gdbm file.
+- Renamed bl_file to mail_blacklist
+- Updated installation process
+- Updated docs
+- gnarwl.readLDAP() now uses ldap_init() instead of ldap_open()
+- Added new version of billiton.schema
+- Found a "nice feature": you may not free(2) the argument of basename(3).
+  Fixed gnarwl.doReply accordingly. On the second thought: using basename
+  was a stupid idea in the first place -> removed it completely.
+- gnarwl is no longer bound to sendmail as MTA; MTA is now completly
+  configureable (with parameters).
+- renamed cfg.v_message to cfg.result
+- added README.upgrade
+- Updated manpage
+- Disallowed autoreply for shared addresses.
+- Renamed mail_limit to mail_limit_receivers, added mail_limit_header
+- Merged README.pitfalls and README.security into FAQ
+- Only the attributes specified in the config file will be queried
+- Reworked gnarwl.readLDAP()
+- added free(rep) after a call to gnarwl.doReply
+- Removed v_begin and v_end, gnarwl now uses flexible macros
+- Removed docs/USING
+- gnarwl.readLDAP() now uses ldap_search_st instead of ldap_search_s
+- Renamed config directive log_verbose to log_level.
+- Eliminated "-v" commandlineswitch
+- Added additional loglevels.
+- Found a hefty bug in gnarwl.readHeader -> reimplemented it along with
+  gnarwl.addAddr and ganrwl.main (they looked ugly anyway).
+- added new function: dbaccess.dbOpen
+- Moved declaration of "verbose" and "cfg" from gnarwl.c to conf.c, so
+  damnit may link against the other objectfiles.
+- Cleaned up the mess in the headerfiles:
+  * Moved config structure from gnarwl.h to conf.h
+  * All functions are now documentated in the corresponding headerfiles
+  * gnarwl.h no longer includes all the other headers
+- Added "contrib" branch for add-on software.
+
+2.1
+- Fixed a minor bug in dbaccess.dbCheck() and dbaccess.dbLock(): Both
+  routines would ommit the trailing \0 of the key value. This was not
+  critical, as both did so, but it was incompatible with damnit.
+- Fixed a memory leak in damnit.listFile() (key.dptr and val.dptr are
+  now freed).
+- "make uninstall" will now also remove the system account of gnarwl (if
+  present).
+- Added a new macro "USERADD_ARG" to the Makefile.
+- Updated docs
+- Gnarwl.readHeader() would call util.cleanAddress without testing whether 
+  the result was NULL or not (and therefore could segfault if one 
+  supplied illegal from/to/cc or reply-to addresses) -> Added a test for
+  NULL after every cleanAddress call.
+- Changed places of main.doReply() and dbaccess.dbLock in gnarwl.main.
+  Locking is now done right after (not before) mail is sent.
+
+2.2
+- Updated Docs
+- Fixed a bug in conf.putEntry(): Gnarwl did segfault whenever the key 
+  value was NULL (that is: a line containing only a whitespace character
+  was encountered in gnarwl.cfg).
+- util.cleanAddress() will now also convert the emailaddress to lowercase ->
+  No more mixed case database lock files.
+- doc/config.template contained a line with lot's of trailing whitespaces
+  (probably a copy and paste error), which would garble the resulting 
+  gnarwl.cfg file. This was not critically, but didn't look pretty either.
+- Fixed a serious bug in gnarwl.readHeader(): malloc did reserve one byte 
+  to few, causing a segfault, whenever the subject contained folded lines.
+- Fixed a memory leak in dbAccess.dbCheck(): data.dptr was not freed before
+  returning.
+      
+2.3
+- Added a check for NULL to util.cleanAddress(). Otherwise gnarwl would
+  segfault trying to convert NULL to lowercase ;-).
+- Removed the obsolete "-v" switch from the SYNOPSIS section in doc/gnarwl.man
+
+3.0
+- Added GNU autoconf configure script
+- Added RPM specfile
+- Fixed a bug in the makefile: Replaced "make" with "$(MAKE)"
+- Updated gnarwl.cfg/config.tmpl
+- Moved config defaults from gnarwl.h to conf.h
+- addAddr() will no longer accept the same address twice
+- Added module "mailhandler", which does now handling of all mail related
+  stuff (removed the according functions from gnarwl.c).
+- Added util.cpyStr
+- Renamed module "conf" to "config", included "conf.h" configuration header
+- renamed "reply_header" config directive to "forceheader"
+- Gnarwl will now complain about unknown config directives (instead of
+  silently ignoring them).
+- config.putEntry lacked a "return" in the "ldap_map" block -> fixed.
+- config.putEntry "map_subject" keyword had a typo -> fixed.
+- Replaced billiton.schema with ISPEnv.schema
+- Added wait() call to mailhandler.sendMail(), so that gnarwl will send mail
+  sequentially instead of "all at once".  
+- Documented config structure in config.h (why didn't I do that earlier?!?)
+- Better status report for incomming mail (in debug level).
+- Renamed files/config_directives
+- Fixed syslog calls
+- Removed gnarwl.readLDAP and put the functionality in dbaccess.
+- One persistend LDAP connection is now used (instead of one
+  connection/query).
+- Gnarwl no longer expands "\n".
+- Support for shared addresses (=ldapfilter matching more than one entry).
+- optimized several string copy operations.
+- damnit.printHelp() lacked a "\" in the text -> fixed.
+- dbAccess.dbCheck() and dbaccess.dbLock() will now return immediatly, if
+  cfg.db_exp==0
+- Updated manpages  
+- Cleaned up doc dir (moved stuff to data dir)
+- Renamed doc/replyheader.txt to header.txt
+- Restructured half of the Makefile stuff.
+- File creation mask is now configureable
+- Added "-a" commandline switch
+- Added "forcefooter" config directive.
+- Added "recvheader" config directive
+- Added "umask" config directive
+- Added "protocol" config directive
+- If "blockexpire" is set to "0", now blockfiles will be accessed.
+- Changed binding of macronames, now the macroname always comes first
+- $(BIN) and $(SBIN) will now be created in src dir
+- Removed "uninstall:" target from Makefile, if you want to be able
+  to remove gnarwl, then make it an RPM package.
+- Delegated "install:" target from top Makefile
+- moved config.tmpl from doc to data dir
+- Reworked "-f" switch of damnit -> Format is now completly configureable. 
+- Added "-s" commandline switch
+- Renamed DEFAULT_DBEXP to DEFAULT_EXPIRE
+- Renamed DEFAULT_DBDIR to BLOCKDIR, and put it in the CFGLAGS
+- Added description of "-l" parameter to damnit manpage
+- Added troubleshooting section to doc/INSTALL
+- added characterset conversion routines.
+- cleaned up doc/AUTHORS
+
+3.1
+- Added "-ldl -lresolv" to the LFLAGS again, some distros seem to have a
+problem without.
+- Fixed segfault bug triggered by "From: <>" headers
+- Fixed segfault bug in mailhander.readFromSTDIN(): A buffer was freed to
+  early.
+
+3.2
+- Some updates to the docs
+- Fixed some compiler warnings
+- Added horde plugin to the contrib branch.
+- Added ISPEnv2.schema
+
+3.3
+- Cosmetical fix in util.translateString(): It said "*out='\0'" changed it
+  to a more portable: "*out=(char)NULL"
+- Fixed a bug in mailhandler.readFromSTDIN(): Added dummy instruction to
+  completely empty stdin. Previous versions would have only read the
+  mailheader (for performance sake), but it seems, this may SIGPIPE some
+  delivery agents when trying to pass very big mails.
+- Removed the commented out section in mailhandler.readFromSTDIN() (it would
+  have clashed with the previous fix, uncommented).
+- Added another way to make gnarwl work with postfix to doc/INSTALL 
+  (thanx Thomas).
+- Rewrote the Troubleshooting section in doc/INSTALL.
+
+
+3.4
+- Fixed RFC 2822 compliance bug. Gnarwl now honors the "Sender:" header,
+  if set. That is, gnarwl now first looks for "Sender:", then "Reply-To:"
+  and lastly "From:" when trying to determine where to send an answer to.
+- Minor fix to Makefile.in, so configure will not complain about it not
+  honoring @datarootdir@
+- Updated contact information.
+- Fixed a lot of compilerwarnings concerning string comparisons (the
+  terminating null char was encoded awkwardly).
+- Added -DLDAP_DEPRECATED to CFLAGS to suppress compiler warnings about
+  implicitly declared functions (it's better to use deprecated functions, 
+  then to break compability with older systems).
+
+3.5
+- Fixed a bug that would make gnarwl segfault if no footer is forced via the
+  forcefooter directive.
+- Corrected doc/INSTALL regarding invocation syntax and removed the
+  "always_bcc" reference as this directive does not seem to work any longer.
+- Minor FAQ updates.

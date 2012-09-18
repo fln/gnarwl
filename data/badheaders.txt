@@ -1,0 +1,5 @@
+Precedence: list
+Precedence: bulk
+Precedence: junk
+X-Mailer: GNARWL
+To: undisclosed-recipients:;

@@ -1,0 +1,101 @@
+###############
+# What's new? #
+###############
+
+You only need to read this file, if upgrading from a v2.x release. 
+
+Like version 2.0, version 3.0 is a major rewrite of the code. Again only a
+few more features were planned, but it turned out, that the codebase was
+still quite cumbersome and in large parts overly complex as well as 
+ineffecient. Especially the mailparser proved to be a real nightmare here,
+which finally led to a nearly complete redesign of the according routines.
+
+
+- Several bugfixes
+
+- Improved documentation
+
+- Many optimizations
+  
+- More modularized code
+
+- Improved logging
+
+- Added GNU autoconf configure script
+
+- Added RPM specfile
+
+- Renamed (nearly) any config directive
+
+- Modernized Makefiles
+
+- Gnarwl will now complain about misspelled config directives
+
+- Replaced billiton.schema with ISPEnv.schema
+
+- Outgoing mails are now send "single file", instead of "all at once"
+
+- Restructured a good deal of the code
+
+- Support for shared addresses (queryfilter matching more then one entry)
+
+- Blockfile reading/writing may now be completly surpressed
+
+- Blockfile file permission may now be set in configfile
+
+- A standard footer may now be forced on outgoing mail, as well a header
+
+- Which headers may contain receiving addresses is now configureable
+
+- Sending/Receiving addresses may now be passed via commandline
+
+- Outputformat of damnit now freely configureable
+
+- LDAP protocol version selectable
+
+- Support for characterset conversion
+
+#############
+# Upgrading #
+#############
+
+- Backward compatibility
+Gnarwl v3 maintains data backward compatibility to earlier versions, with
+one exception: The "\n" macro does no longer exist, it was redundant anyway.
+
+Also note, that the former behaviour of gnarwl was to ignore searches,
+matching more than one LDAP entry. This limitation finally dropped. 
+
+- Building/Installing
+It is no longer required to edit a Makefile. Configuring is now done
+convienently using the configure script. Please note, that the Makefile no
+longer contains the "uninstall" target. So if you need this functionality,
+you should build the program as RPM package.
+
+- Configuration
+Every configuration directive was renamed, while moving from v2 to v3. The 
+reason for this is, that before, I tried to group config directives by giving
+them prefixes. This however made the keywords both long and less rememberable. 
+So this concept was finally dropped.
+
+- A word on LDAP schema
+Former versions of gnarwl shipped with a schema file called "billiton.schema".
+Unfortunatly, that file proved to be be both, poorly designed and broken in a 
+number of ways, that would severly limit it's useability. These facts made a
+complete redesign unavoidable, and the continueing use of this file
+disadviseable.
+
+"ISPEnv.schema", which is now included with gnarwl, derived from the broken
+"billiton.schema", by redefining most attributes and objectclasses. 
+Unfortunatly, this too proves to be a dilemma, as the openldap documentation
+is rather sketchy on whether or not changing declarations may corrupt the 
+data in the database.
+
+So, if you have been using "billiton.schema", I recommend the following
+upgrade procedure (just to be on the safe side):
+
+1. Export your entire database to LDIF
+2. Stop the LDAP server
+3. Delete the binary files storing the database on disk
+4. Replace "billiton.schema" with ISPEnv.schema
+5. Start the LDAP server and re-import the LDIF snapshot

@@ -1,0 +1,30 @@
+                              GNARWL
+                              
+                    Gnu Neat Auto Reply With LDAP
+                    
+                    
+... And also the sound I issued many times implementing email autoresponding.
+
+
+What is GNARWL
+--------------
+
+Gnarwl is a email autoreply/vacation agent, intented to be used on mailservers,
+where users may not (nescessarily) have systemaccoounts, but accountinformation 
+is stored within an LDAP database.
+
+What are the features of gnarwl ?
+---------------------------------
+
+- User information is stored in LDAP, no shellaccounts required.
+- Configurable via single systemwide configuration file.
+- Per user locking of sent email (to prevent mail loops).
+- No more messing around with individual .forward files, all userdata is kept 
+  in LDAP.
+- Configureable header matching (to avoid sending mail to mailing lists).
+- Blacklisting of addresses, that may not use the autoresponder.
+- Forceable header/footer on outgoing mail.
+- Status reports via syslog.
+- Not bound to a particular MTA (though postfix is recommended).
+
+

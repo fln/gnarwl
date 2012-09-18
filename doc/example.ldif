@@ -1,0 +1,20 @@
+#
+# This is an example ldap entry for gnarwl
+#
+dn: uid=babs,ou=people,o=my_org
+objectClass: top
+objectClass: mailAccount
+objectClass: account
+objectClass: Vacation
+uid: babs
+userPassword: {crypt}kj8HsGwUBBMQA
+maildropPlace: /var/mail/babs
+mail: B.Jennings@my_org.com
+description: This is an example mailAccount
+vacationActive: TRUE
+vacationInfo:: SGksCkknbSBjdXJyZW50bHkgb24gdmFjYXRpb24gKHNpbmNlICRiZWdpbikuIE
+ kgd29uJ3QgCmF0dGVuZCBteSBtYWlsYm94IHRpbGwgJGVuZC4=
+vacationStart: christmas
+vacationEnd: new years eve
+vacationForward: J.Doe@my_org.com
+
