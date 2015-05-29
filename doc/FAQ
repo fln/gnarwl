@@ -53,7 +53,7 @@ will supply the empty line him/herself).
 
 -----
 Q: Wouldn't it be nice if a user only had to supply a vacationStart and a
-vactionEnd date and gnarwl would automatically de/activate itself in this 
+vacationEnd date and gnarwl would automatically de/activate itself in this 
 period?
 A: Sure, that would be nice, but it won't be included in gnarwl for a simple
 reason: What format would that date be?
