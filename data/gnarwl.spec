@@ -1,6 +1,6 @@
 %define name gnarwl
 %define sname damnit
-%define version 3.2
+%define version 3.7
 %define mansec 8
 %define homedir /var/lib/%{name}
 %define useradd_prg /usr/sbin/useradd
@@ -14,10 +14,11 @@ Release: 1
 License: GPL
 Group: Applications/Communications
 Source: %{name}-%{version}.tgz
-Requires: gdbm, openldap2
+Requires: gdbm, openldap
 BuildRoot: %_tmppath/%{name}-%{version}-buildroot
 Packager: Patrick Ahlbrecht <p.ahlbrecht@billiton.de>
 URL: http://www.oss.billiton.de/
+BuildRequires: openldap-devel gdbm-devel
 
 %description
 Gnarwl is an email autoresponder, intended to be a successor to the old
@@ -88,3 +89,8 @@ if ! %__grep %{name} /etc/passwd > /dev/null; then
   echo "Creating system account \"%{name}\"" ;
   %{useradd_prg} %{useradd_arg} ;
 fi
+
+%changelog
+* Wed Apr 13 2016 Felipe Zipitria <fzipi@fing.edu.uy> - 3.7
+- Rebuild 
+
