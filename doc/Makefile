@@ -13,19 +13,19 @@ manpage:
 
 
 install:
-	mkdir -m 755 -p $(DOCDIR) $(MANDIR)/man$(MAN_SEC)
-	install -m 644 $(BIN).$(MAN_SEC) $(MANDIR)/man$(MAN_SEC)
-	install -m 644 $(SBIN).$(MAN_SEC) $(MANDIR)/man$(MAN_SEC)
-	install -m 644 FAQ $(DOCDIR)
-	install -m 644 LICENSE $(DOCDIR)
-	install -m 644 AUTHORS $(DOCDIR)
-	install -m 644 INSTALL $(DOCDIR)
-	install -m 644 ISPEnv.schema $(DOCDIR)
-	install -m 644 ISPEnv2.schema $(DOCDIR)
-	install -m 644 example.ldif $(DOCDIR)
-	install -m 644 HISTORY $(DOCDIR)
-	install -m 644 README $(DOCDIR)
-	gzip -f -9 $(DOCDIR)/FAQ
-	gzip -f -9 $(DOCDIR)/HISTORY
-	gzip -f -9 $(MANDIR)/man$(MAN_SEC)/$(BIN).$(MAN_SEC)
-	gzip -f -9 $(MANDIR)/man$(MAN_SEC)/$(SBIN).$(MAN_SEC)
+	mkdir -m 755 -p $(DESTDIR)$(DOCDIR) $(DESTDIR)$(MANDIR)/man$(MAN_SEC)
+	install -m 644 $(BIN).$(MAN_SEC) $(DESTDIR)$(MANDIR)/man$(MAN_SEC)
+	install -m 644 $(SBIN).$(MAN_SEC) $(DESTDIR)$(MANDIR)/man$(MAN_SEC)
+	install -m 644 FAQ $(DESTDIR)$(DOCDIR)
+	install -m 644 LICENSE $(DESTDIR)$(DOCDIR)
+	install -m 644 AUTHORS $(DESTDIR)$(DOCDIR)
+	install -m 644 INSTALL $(DESTDIR)$(DOCDIR)
+	install -m 644 ISPEnv.schema $(DESTDIR)$(DOCDIR)
+	install -m 644 ISPEnv2.schema $(DESTDIR)$(DOCDIR)
+	install -m 644 example.ldif $(DESTDIR)$(DOCDIR)
+	install -m 644 HISTORY $(DESTDIR)$(DOCDIR)
+	install -m 644 README $(DESTDIR)$(DOCDIR)
+	gzip -f -9 $(DESTDIR)$(DOCDIR)/FAQ
+	gzip -f -9 $(DESTDIR)$(DOCDIR)/HISTORY
+	gzip -f -9 $(DESTDIR)$(MANDIR)/man$(MAN_SEC)/$(BIN).$(MAN_SEC)
+	gzip -f -9 $(DESTDIR)$(MANDIR)/man$(MAN_SEC)/$(SBIN).$(MAN_SEC)
