@@ -32,6 +32,7 @@ struct conf {
   int maxmail;		// max number of recepients allowed
   int maxheader;	// max number of header lines allowed in mail
   int umask;		// file creation mask for db files
+  int deref;		// When to follow LDAP aliases
 };
 
 /**

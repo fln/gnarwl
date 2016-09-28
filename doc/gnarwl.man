@@ -194,6 +194,9 @@ Specifies what to send to the syslog. A higher loglevel
 automatically includes all lower loglevels (see section syslog for more 
 information).
 
+.IP "deref <never|search|find|always>"
+Controls what LDAP alias dereferencing will be performed. Default is "find".
+
 .SH SYSLOG
 Since 
 .B gnarwl

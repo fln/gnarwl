@@ -192,6 +192,14 @@ void putEntry(char* key, char* val) {
     return;
   }
   
+  if (!strcasecmp(key,"deref")) {
+    if (!strcasecmp(val,"never")) cfg.deref=LDAP_DEREF_NEVER;
+    if (!strcasecmp(val,"search")) cfg.deref=LDAP_DEREF_SEARCHING;
+    if (!strcasecmp(val,"find")) cfg.deref=LDAP_DEREF_FINDING;
+    if (!strcasecmp(val,"always")) cfg.deref=LDAP_DEREF_ALWAYS;
+    return;
+  }
+
   syslog(LOG_MAIL|LOG_WARNING,"WARN/CFG Unknown config directive: %s",key);
 }
 
@@ -226,6 +234,7 @@ void setDefaults(void) {
   cpyStr(&cfg.recv_header[0],"to");
   cpyStr(&cfg.recv_header[1],"cc");
   if (cfg.macro_attr==NULL || cfg.macro_name==NULL) oom();
+  cfg.deref=LDAP_DEREF_FINDING;
 }
 
 void readConf(char *cfile) {
