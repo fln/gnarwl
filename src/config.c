@@ -234,7 +234,7 @@ void setDefaults(void) {
   cpyStr(&cfg.recv_header[0],"to");
   cpyStr(&cfg.recv_header[1],"cc");
   if (cfg.macro_attr==NULL || cfg.macro_name==NULL) oom();
-  cfg.deref=LDAP_DEREF_FINDING;
+  cfg.deref=LDAP_DEREF_NEVER;
 }
 
 void readConf(char *cfile) {
