@@ -7,8 +7,8 @@ catch:
 all: clean compile
 
 compile: $(OBJ) $(SOBJ)
-	$(CC) $(CFLAGS) $(LFLAGS) -o $(BIN) gnarwl.c $(OBJ)
-	$(CC) $(CFLAGS) $(LFLAGS) -o $(SBIN) damnit.c $(SOBJ)
+	$(CC) $(CFLAGS) -o $(BIN) gnarwl.c $(OBJ) $(LFLAGS)
+	$(CC) $(CFLAGS) -o $(SBIN) damnit.c $(SOBJ) $(LFLAGS)
 
 clean:
 	rm -f DEADJOE *.o *~ $(BIN) $(SBIN)
