@@ -56,3 +56,4 @@ Improvements
 *   New config option *ca_cert* allow specifying CA certificate when ldaps or 
     StartTLS is used.
 *   New config option *starttls*.
+*   New config option *deref* allows control of LDAP alias dereferencing.

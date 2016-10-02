@@ -196,6 +196,7 @@ void dbConnect() {
   }
 
   ldap_set_option(ldcon, LDAP_OPT_PROTOCOL_VERSION, &cfg.protver);
+  ldap_set_option(ldcon, LDAP_OPT_DEREF, &cfg.deref);
 
   if (cfg.starttls) {
     rc = ldap_start_tls_s(ldcon, NULL, NULL);
