@@ -14,7 +14,7 @@ damnit \- DAtabase MaNagement InTerface
 .B damnit
 is the database management tool for 
 .B gnarwl(_MANSEC_)
-. It allows
+\&. It allows
 systemadministrators to list and/or manipulate 
 .B gnarwl's
 database files. It is 

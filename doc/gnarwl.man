@@ -149,7 +149,7 @@ Path to a database file, containing matching patterns for the mailheader.
 If an entry stored in this file matches a line in the header exactly, then
 this mail will be ignored by
 .B gnarwl
-. (useful to avoid sending automatic replies to mailing lists). This feature
+\&. (useful to avoid sending automatic replies to mailing lists). This feature
 is deactivated by default.
 
 .IP "blacklist <filename>"
