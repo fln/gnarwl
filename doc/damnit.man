@@ -43,7 +43,7 @@ from stdin (one per line), until either EOF or an empty line is detected.
 .IP "-a <file> [<value>]"
 Add <value> to <file>. If <value> is already stored in <file>, damnit will
 only update the timestamp. If <value> is omited, damnit will read <value>
-from stdin (one per line), until either EOF or an emtpy line is detected.
+from stdin (one per line), until either EOF or an empty line is detected.
 
 .IP "-l <file>"
 List database file specified by <file>.
@@ -70,7 +70,7 @@ Patrick Ahlbrecht <p.ahlbrecht@billiton.de>
 Every file in this directory represents an emailaddress, 
 .B gnarwl
 (already) received a mail for. Every time, gnarwl sends out an autorreply 
-for an address, the recepient of that mail is locked into the according file.
+for an address, the recipient of that mail is locked into the according file.
 .B gnarwl 
 will not send any further autoreplies for this sender/receiver combo, until 
 the timeout specified in gnarwl.cfg expires.

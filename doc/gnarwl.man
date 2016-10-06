@@ -26,14 +26,14 @@ Configuration is conveniently done via one systemwide configfile.
 .P
 Like the old 
 .B vacation(1)
-program, gnarwl accepts incomming mail through
+program, gnarwl accepts incoming mail through
 stdin, and will send outgoing mail via an external MTA (it even maintains
 basic commandline compatibility, so it may be used as a drop in
 replacement).
 .P
 Several gdbm databases are maintained, in order to make sure, a) mail does not
 bounce back and force between gnarwl and another automated MUA, b) mailing
-lists will not be bothered and c) specifc local addresses may never produce 
+lists will not be bothered and c) specific local addresses may never produce 
 automatic replies.
 All these database files may be managed using the 
 .B damnit(_MANSEC_)
@@ -60,19 +60,19 @@ possible using the -c commandline switch. The following keywords are
 recognized in the configfile:
 
 .IP "map_sender <macroname>"
-Binds a macroname (case insensitive), refering to the sender of an incomming 
+Binds a macroname (case insensitive), referring to the sender of an incoming 
 email. Defaults to "$sender".
 
 .IP "map_receiver <macroname>"
-Binds a macroname (case insensitive), refering to the receiver(s) of an 
-incomming email. Defaults to "$receiver".
+Binds a macroname (case insensitive), referring to the receiver(s) of an 
+incoming email. Defaults to "$receiver".
 
 .IP "map_subject <macroname>"
-Binds a macroname (case insensitive), refering to the subject of an incomming 
+Binds a macroname (case insensitive), referring to the subject of an incoming 
 email. Defaults to "$subject".
 
 .IP "map_field <ldapattribute> <macroname>"
-Binds a macroname (case insensitive), refering to a field in the resultset, 
+Binds a macroname (case insensitive), referring to a field in the resultset, 
 returned by the database. There are no defaults for this directive.
 
 .IP "server_uri <ldap_uri [ldap_uri ...]>"
@@ -134,13 +134,13 @@ How long (in hours) to block a certain sender/recepient combo. Default is
 blockfiles are read/written in this case.
 
 .IP "maxreceivers <number>"
-Ignore incomming email, specifying too many receiving addresses. It does
+Ignore incoming email, specifying too many receiving addresses. It does
 not matter, whether these are local or not, as 
 .B gnarwl 
 doesn't know domains. Default is 256.
 
 .IP "maxheader <number>"
-Ignore incomming email with more than this number of header lines. Lines are
+Ignore incoming email with more than this number of header lines. Lines are
 counted before unfolding them, so a folded line really counts as at least
 two lines. Default is 256.
 
