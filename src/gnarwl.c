@@ -22,7 +22,7 @@ char** tmprecv=NULL;
 void printUsage(void) {
   
   printf("\nGNARWL(v%s) - Gnu Neat Auto Reply With LDAP\n\n\
-  Read email through stdin, reply to it, if nescessary\n\
+  Read email through stdin, reply to it, if necessary\n\
   Options:\n\n\
   \t-h\t\tprint help\n\
   \t-a <address>\tforce receiver address\n\
