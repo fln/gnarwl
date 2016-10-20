@@ -254,7 +254,7 @@ void sendMail(char* addr, char* body) {
   }
   close(p[0]);
   desc=fdopen(p[1],"w");
-  fprintf(desc,body);
+  fprintf(desc,"%s",body);
   fclose(desc);
   
   wait(NULL);
