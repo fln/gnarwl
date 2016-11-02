@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <sysexits.h>
 #include <ldap.h>
 #include <lber.h>
 
@@ -181,7 +182,7 @@ void dbConnect() {
     rc = ldap_set_option(NULL, LDAP_OPT_X_TLS_CACERTFILE, cfg.ca_cert);
     if (rc != LDAP_SUCCESS) {
         syslog(LOG_MAIL|LOG_ERR,"CRIT/LDAP Set option TLS_CACERTFILE failed: %s",ldap_err2string(rc));
-        exit(EXIT_FAILURE);
+        exit(EX_TEMPFAIL);
     }
   }
 
@@ -192,7 +193,7 @@ void dbConnect() {
 
   if (ldcon==NULL) {
     syslog(LOG_MAIL|LOG_ERR,"CRIT/LDAP Connection failed");
-    exit(EXIT_FAILURE);
+    exit(EX_TEMPFAIL);
   }
 
   ldap_set_option(ldcon, LDAP_OPT_PROTOCOL_VERSION, &cfg.protver);
@@ -202,14 +203,14 @@ void dbConnect() {
     rc = ldap_start_tls_s(ldcon, NULL, NULL);
     if (rc != LDAP_SUCCESS) {
         syslog(LOG_MAIL|LOG_ERR,"CRIT/LDAP StartTLS failed: %s",ldap_err2string(rc));
-        exit(EXIT_FAILURE);
+        exit(EX_TEMPFAIL);
     }
   }
 
   rc=ldap_simple_bind_s(ldcon,cfg.uid,cfg.pwd);
   if (rc!=LDAP_SUCCESS) {
     syslog(LOG_MAIL|LOG_ERR,"CRIT/LDAP %s",ldap_err2string(rc));
-    exit(EXIT_FAILURE);
+    exit(EX_TEMPFAIL);
   }
 }
 
