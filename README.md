@@ -57,3 +57,5 @@ Improvements
     StartTLS is used.
 *   New config option *starttls*.
 *   New config option *deref* allows control of LDAP alias dereferencing.
+*   On LDAP errors exit with **EX_TEMPFAIL** status code to inform MTA that
+    gnarwl execution should be retried.
