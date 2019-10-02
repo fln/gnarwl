@@ -1,6 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT()
 AC_CONFIG_HEADERS(conf.h)
+AH_TOP([#include "static.h"])
 AC_CONFIG_FILES(Makefile)
 
 # Checks for programs.
@@ -30,8 +31,8 @@ AC_CHECK_FUNCS([ldap_set_option])
 
 AC_CHECK_FUNCS([iconv])
 
-AC_DEFINE_UNQUOTED(UMASK,$permmask)
-AC_DEFINE_UNQUOTED(MAXLINE,$maxline)
-AC_DEFINE_UNQUOTED(DEFAULT_MTA,$mta)
+AC_DEFINE_UNQUOTED(UMASK,[$permmask], [File creation mask for database files])
+AC_DEFINE_UNQUOTED(MAXLINE,[$maxline], [Maximum input buffer line length])
+AC_DEFINE_UNQUOTED(DEFAULT_MTA,[$mta], [MTA to use])
 
 AC_OUTPUT
